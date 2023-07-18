@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/BalkanID-University/balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni/db"
 	m "github.com/BalkanID-University/balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni/models"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -17,7 +18,8 @@ func main() {
 	// Set up Cross-Origin Resource Sharing (CORS) for the app
 	// It's allowing every request from all origins that require credentials
 	app.Use(cors.New(cors.Config{AllowOrigins: "*", AllowCredentials: true}))
-
+	// Establishing Connection to Database
+	db.Connect()
 	// Set up a route for the root ("/") path
 	// When a GET request is received at this path, the server sends a JSON response indicating that it's working
 	app.Get("/", func(c *fiber.Ctx) error {
