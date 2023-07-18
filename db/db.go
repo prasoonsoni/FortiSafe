@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/BalkanID-University/balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni/models"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -37,6 +38,11 @@ func Connect() {
 	if err != nil {
 		// If there is an error connecting to the database, logging an error message and terminating the program
 		log.Println("Failed to connect to Database")
+		log.Fatal(err.Error())
+	}
+
+	err = DB.AutoMigrate(&models.User{})
+	if err != nil {
 		log.Fatal(err.Error())
 	}
 
