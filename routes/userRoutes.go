@@ -11,4 +11,5 @@ func Setup(app *fiber.App) {
 	app.Post("/api/user/login", userControllers.LoginUser)
 	app.Get("/api/user/get", middlewares.AuthenticateUser, userControllers.GetUser)
 	app.Put("/api/user/deactivate", middlewares.AuthenticateUser, userControllers.DeactivateUser)
+	app.Put("/api/user/activate", middlewares.AuthenticateUser, userControllers.ActivateUser)
 }

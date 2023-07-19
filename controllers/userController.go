@@ -180,5 +180,43 @@ func DeactivateUser(c *fiber.Ctx) error {
 
 	}
 	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Account Deactivated Successfully"})
+}
 
+func ActivateUser(c *fiber.Ctx) error {
+	// Get the user_id from the local context and cast it to a string
+	user_id := c.Locals("user_id").(string)
+
+	// Parse the user_id into a UUID
+	id, err := uuid.Parse(user_id)
+
+	// If error occurs parsing the used_id return Internal Server Error
+	if err != nil {
+		log.Println(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Internal Server Error"})
+	}
+
+	// Define a user variable of type m.User
+	var user m.User
+
+	// Query the database for a user with the given ID. First(&user) will order by primary key and limit the result to the first record.
+	// The user data is then loaded into the 'user' object.
+	result := db.DB.Where(&m.User{ID: id}).First(&user)
+
+	// If no rows are affected by the query (i.e., the user was not found in the database), then return a 404 status and a JSON response indicating that the user was not found.
+	if result.RowsAffected == 0 {
+		return c.Status(fiber.StatusNotFound).JSON(&m.Response{Success: false, Message: "User Not Found"})
+	}
+
+	if !user.IsDeactivated {
+		return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Account Already Activated"})
+	}
+	user.IsDeactivated = false
+	user.DeactivatedAt = nil
+
+	result = db.DB.Save(&user)
+	if result.RowsAffected == 0 {
+		return c.Status(fiber.StatusOK).JSON(&m.Response{Success: false, Message: "Error Activating Account"})
+
+	}
+	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Account Activated Successfully"})
 }
