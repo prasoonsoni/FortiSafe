@@ -119,6 +119,15 @@ func LoginUser(c *fiber.Ctx) error {
 		// If there's an error in signing the token, log the error
 		log.Println(err.Error())
 	}
+	logs := &m.AccountStatusLogs{
+		ID:     uuid.New(),
+		UserID: user.ID,
+		Status: "loggedin",
+	}
+	result = db.DB.Create(&logs)
+	if result.RowsAffected == 0 {
+		log.Println(result.Error)
+	}
 
 	// If the login was successful, return a success response along with the JWT token
 	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Login Successful", Data: fiber.Map{"token": token}})
@@ -151,6 +160,15 @@ func GetUser(c *fiber.Ctx) error {
 
 	if user.IsDeleted {
 		return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Your Account is Deleted"})
+	}
+	logs := &m.AccountStatusLogs{
+		ID:     uuid.New(),
+		UserID: id,
+		Status: "fetched",
+	}
+	result = db.DB.Create(&logs)
+	if result.RowsAffected == 0 {
+		log.Println(result.Error)
 	}
 
 	// If the user was found, return a 200 status and a JSON response indicating that the user was found, along with the user data.
