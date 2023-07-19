@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/BalkanID-University/balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni/db"
 	m "github.com/BalkanID-University/balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni/models"
+	userRoutes "github.com/BalkanID-University/balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni/routes"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -25,7 +26,7 @@ func main() {
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusOK).JSON(m.Response{Success: true, Message: "Server is Working"})
 	})
-
+	userRoutes.Setup(app)
 	// Start the server and make it listen for incoming HTTP requests on port 3000
 	app.Listen(":3000")
 
