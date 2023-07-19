@@ -1,4 +1,4 @@
-package userControllers
+package controllers
 
 import (
 	"log"

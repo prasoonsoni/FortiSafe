@@ -40,7 +40,7 @@ func Connect() {
 		log.Fatal(err.Error())
 	}
 
-	Migrate()
+	// Migrate()
 	if err != nil {
 		log.Fatal(err.Error())
 	}
