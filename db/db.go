@@ -6,7 +6,6 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/BalkanID-University/balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni/models"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -41,7 +40,7 @@ func Connect() {
 		log.Fatal(err.Error())
 	}
 
-	err = DB.AutoMigrate(&models.User{})
+	Migrate()
 	if err != nil {
 		log.Fatal(err.Error())
 	}
