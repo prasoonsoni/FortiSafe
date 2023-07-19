@@ -29,8 +29,11 @@ func CreateUser(c *fiber.Ctx) error {
 	// Declare a variable to hold the user data
 	var user *m.User
 
-	// Check if a user with the same email exists
 	result := db.DB.Where(&m.User{Email: data["email"]}).Find(&user)
+	if user.IsDeleted {
+		return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Your Account is Deleted"})
+	}
+	// Check if a user with the same email exists
 	// If a user with the same email already exists, return a response indicating that
 	if result.RowsAffected == 1 {
 		return c.Status(fiber.StatusOK).JSON(&m.Response{Success: false, Message: "E-Mail already exists"})
@@ -89,12 +92,21 @@ func LoginUser(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusOK).JSON(&m.Response{Success: false, Message: "E-Mail Not Found"})
 	}
 
+	if user.IsDeleted {
+		return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Your Account is Deleted"})
+	}
+
 	// Compare the hashed password in the database with the password provided by the user
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(data["password"]))
 	if err != nil {
 		// If the passwords do not match, log the error and return a response indicating that
 		log.Println(err.Error())
 		return c.Status(fiber.StatusOK).JSON(&m.Response{Success: false, Message: "Incorrect Password"})
+	}
+
+	// Checking if user's account is active or not
+	if user.IsDeactivated {
+		return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Account is not active. Please activate your account."})
 	}
 
 	// Generate a JWT token for the user, adding the user's ID as a claim and setting an expiration time
@@ -137,6 +149,10 @@ func GetUser(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusNotFound).JSON(&m.Response{Success: false, Message: "User Not Found"})
 	}
 
+	if user.IsDeleted {
+		return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Your Account is Deleted"})
+	}
+
 	// If the user was found, return a 200 status and a JSON response indicating that the user was found, along with the user data.
 	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "User Found Successfully", Data: user})
 
@@ -165,6 +181,10 @@ func DeactivateUser(c *fiber.Ctx) error {
 	// If no rows are affected by the query (i.e., the user was not found in the database), then return a 404 status and a JSON response indicating that the user was not found.
 	if result.RowsAffected == 0 {
 		return c.Status(fiber.StatusNotFound).JSON(&m.Response{Success: false, Message: "User Not Found"})
+	}
+
+	if user.IsDeleted {
+		return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Your Account is Deleted"})
 	}
 
 	if user.IsDeactivated {
@@ -207,6 +227,10 @@ func ActivateUser(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusNotFound).JSON(&m.Response{Success: false, Message: "User Not Found"})
 	}
 
+	if user.IsDeleted {
+		return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Your Account is Deleted"})
+	}
+
 	if !user.IsDeactivated {
 		return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Account Already Activated"})
 	}
@@ -219,4 +243,44 @@ func ActivateUser(c *fiber.Ctx) error {
 
 	}
 	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Account Activated Successfully"})
+}
+
+func DeleteUser(c *fiber.Ctx) error {
+	// Get the user_id from the local context and cast it to a string
+	user_id := c.Locals("user_id").(string)
+
+	// Parse the user_id into a UUID
+	id, err := uuid.Parse(user_id)
+
+	// If error occurs parsing the used_id return Internal Server Error
+	if err != nil {
+		log.Println(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Internal Server Error"})
+	}
+
+	// Define a user variable of type m.User
+	var user m.User
+
+	// Query the database for a user with the given ID. First(&user) will order by primary key and limit the result to the first record.
+	// The user data is then loaded into the 'user' object.
+	result := db.DB.Where(&m.User{ID: id}).First(&user)
+
+	// If no rows are affected by the query (i.e., the user was not found in the database), then return a 404 status and a JSON response indicating that the user was not found.
+	if result.RowsAffected == 0 {
+		return c.Status(fiber.StatusNotFound).JSON(&m.Response{Success: false, Message: "User Not Found"})
+	}
+
+	if user.IsDeleted {
+		return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Account Already Deleted"})
+	}
+	now := time.Now()
+	user.IsDeleted = true
+	user.DeletedAt = &now
+
+	result = db.DB.Save(&user)
+	if result.RowsAffected == 0 {
+		return c.Status(fiber.StatusOK).JSON(&m.Response{Success: false, Message: "Error Deleting Account"})
+
+	}
+	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Account Deleted Successfully"})
 }
