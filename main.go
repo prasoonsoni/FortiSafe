@@ -28,6 +28,7 @@ func main() {
 	})
 	routes.SetupUserRoutes(app)
 	routes.SetupPermissionRoutes(app)
+	routes.SetupRoleRoutes(app)
 	// Start the server and make it listen for incoming HTTP requests on port 3000
 	app.Listen(":3000")
 
