@@ -197,7 +197,15 @@ func DeactivateUser(c *fiber.Ctx) error {
 	result = db.DB.Save(&user)
 	if result.RowsAffected == 0 {
 		return c.Status(fiber.StatusOK).JSON(&m.Response{Success: false, Message: "Error Deactivating Account"})
-
+	}
+	logs := &m.AccountStatusLogs{
+		ID:     uuid.New(),
+		UserID: id,
+		Status: "deactivated",
+	}
+	result = db.DB.Create(&logs)
+	if result.RowsAffected == 0 {
+		log.Println(result.Error)
 	}
 	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Account Deactivated Successfully"})
 }
@@ -240,7 +248,15 @@ func ActivateUser(c *fiber.Ctx) error {
 	result = db.DB.Save(&user)
 	if result.RowsAffected == 0 {
 		return c.Status(fiber.StatusOK).JSON(&m.Response{Success: false, Message: "Error Activating Account"})
-
+	}
+	logs := &m.AccountStatusLogs{
+		ID:     uuid.New(),
+		UserID: id,
+		Status: "activated",
+	}
+	result = db.DB.Create(&logs)
+	if result.RowsAffected == 0 {
+		log.Println(result.Error)
 	}
 	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Account Activated Successfully"})
 }
@@ -280,7 +296,15 @@ func DeleteUser(c *fiber.Ctx) error {
 	result = db.DB.Save(&user)
 	if result.RowsAffected == 0 {
 		return c.Status(fiber.StatusOK).JSON(&m.Response{Success: false, Message: "Error Deleting Account"})
-
+	}
+	logs := &m.AccountStatusLogs{
+		ID:     uuid.New(),
+		UserID: id,
+		Status: "deleted",
+	}
+	result = db.DB.Create(&logs)
+	if result.RowsAffected == 0 {
+		log.Println(result.Error)
 	}
 	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Account Deleted Successfully"})
 }
