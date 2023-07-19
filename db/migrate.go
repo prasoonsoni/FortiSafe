@@ -7,4 +7,5 @@ import (
 func Migrate() {
 	_ = DB.AutoMigrate(&models.User{})
 	_ = DB.AutoMigrate(&models.AccountStatusLogs{})
+	_ = DB.AutoMigrate(&models.Permission{})
 }
