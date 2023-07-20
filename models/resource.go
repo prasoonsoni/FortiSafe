@@ -12,4 +12,5 @@ type Resource struct {
 	Name            string         `gorm:"not null" json:"name"`
 	Description     string         `gorm:"not null" json:"description"`
 	AssociatedRoles pq.StringArray `gorm:"type:text[]" json:"associated_roles"`
+	CreatedBy       uuid.UUID      `gorm:"type:uuid" json:"created_by"`
 }

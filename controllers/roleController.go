@@ -150,7 +150,7 @@ func RemovePermission(c *fiber.Ctx) error {
 	if tx.Error != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Error Removing Permission"})
 	}
-	return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: true, Message: "Permission Removed Successfully"})
+	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Permission Removed Successfully"})
 }
 
 func AssignRole(c *fiber.Ctx) error {
@@ -190,7 +190,7 @@ func AssignRole(c *fiber.Ctx) error {
 		log.Println(tx.Error.Error())
 		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Error Assigning Role"})
 	}
-	return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: true, Message: "Role Assigned Successfully"})
+	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Role Assigned Successfully"})
 }
 
 func UnassignRole(c *fiber.Ctx) error {
