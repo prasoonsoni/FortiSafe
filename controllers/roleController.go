@@ -193,3 +193,27 @@ func AssignRole(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: true, Message: "Role Assigned Successfully"})
 }
 
+func UnassignRole(c *fiber.Ctx) error {
+	user_id, err := uuid.Parse(c.Query("user_id"))
+	if err != nil {
+		log.Println(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Give valid user_id"})
+	}
+	if tx := db.DB.Where(m.User{ID: user_id}).Find(&m.User{}); tx.RowsAffected == 0 {
+		return c.Status(fiber.StatusNotFound).JSON(&m.Response{Success: false, Message: "User not found"})
+	}
+	var user *m.User
+	tx := db.DB.Find(&user)
+	if tx.Error != nil {
+		log.Println(tx.Error.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Error Unassign Role"})
+	}
+	user.RoleID = uuid.Nil
+	tx = db.DB.Save(&user)
+
+	if tx.Error != nil {
+		log.Println(tx.Error.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Error unassign Role"})
+	}
+	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Role Unassigned Successfully"})
+}
