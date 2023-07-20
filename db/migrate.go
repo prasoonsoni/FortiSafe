@@ -9,4 +9,5 @@ func Migrate() {
 	_ = DB.AutoMigrate(&models.AccountStatusLogs{})
 	_ = DB.AutoMigrate(&models.Permission{})
 	_ = DB.AutoMigrate(&models.Role{})
+	_ = DB.AutoMigrate(&models.RolePermission{})
 }
