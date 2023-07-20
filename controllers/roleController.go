@@ -152,3 +152,44 @@ func RemovePermission(c *fiber.Ctx) error {
 	}
 	return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: true, Message: "Permission Removed Successfully"})
 }
+
+func AssignRole(c *fiber.Ctx) error {
+	var data m.AssignRoleBody
+	err := c.BodyParser(&data)
+	log.Println(data)
+	if err != nil {
+		// If there's an error in parsing the body, log the error and return an Internal Server Error response
+		log.Println(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Internal Server Error"})
+	}
+	user_id, err := uuid.Parse(data.UserID)
+	if err != nil {
+		log.Println(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Give valid user_id"})
+	}
+	if tx := db.DB.Where(m.User{ID: user_id}).Find(&m.User{}); tx.RowsAffected == 0 {
+		return c.Status(fiber.StatusNotFound).JSON(&m.Response{Success: false, Message: "User not found"})
+	}
+	role_id, err := uuid.Parse(data.RoleID)
+	if err != nil {
+		log.Println(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Give valid role_id"})
+	}
+	if tx := db.DB.Where(m.Role{ID: role_id}).Find(&m.Role{}); tx.RowsAffected == 0 {
+		return c.Status(fiber.StatusNotFound).JSON(&m.Response{Success: false, Message: "Role not found"})
+	}
+	var user m.User
+	tx := db.DB.Where(m.User{ID: user_id}).Find(&user)
+	if tx.Error != nil {
+		log.Println(tx.Error.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Error Assigning Role"})
+	}
+	user.RoleID = role_id
+	tx = db.DB.Save(&user)
+	if tx.Error != nil {
+		log.Println(tx.Error.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Error Assigning Role"})
+	}
+	return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: true, Message: "Role Assigned Successfully"})
+}
+
