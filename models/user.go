@@ -17,5 +17,5 @@ type User struct {
 	IsDeactivated bool       `gorm:"default:false" json:"is_deactivated"`
 	DeletedAt     *time.Time `json:"deleted_at"`
 	DeactivatedAt *time.Time `json:"deactivated_at"`
-	RoleID        uuid.UUID  `gorm:"type:uuid; json:"role_id"`
+	RoleID        uuid.UUID  `gorm:"type:uuid" json:"role_id"`
 }

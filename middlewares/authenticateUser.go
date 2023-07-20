@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 
+	// "github.com/BalkanID-University/balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni/db"
 	"github.com/BalkanID-University/balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni/db"
 	m "github.com/BalkanID-University/balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni/models"
 	"github.com/gofiber/fiber/v2"
@@ -51,10 +52,11 @@ func AuthenticateUser(c *fiber.Ctx) error {
 
 	// If the JWT's claims can be successfully converted into MapClaims and the token is valid, add the user_id from the claims to the request context and call the next handler in the chain.
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		user_id, _ := uuid.Parse(claims["user"].(string))
+		user_id, _ := uuid.Parse(claims["user_id"].(string))
 		var user *m.User
 		_ = db.DB.Where(&m.User{ID: user_id}).Find(&user)
-		c.Locals("user_role", user.RoleID)
+		fmt.Println(user.RoleID.String())
+		c.Locals("user_role", user.RoleID.String())
 		c.Locals("user_id", claims["user_id"])
 		return c.Next()
 	}
