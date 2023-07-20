@@ -11,14 +11,8 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-type CreateRoleBody struct {
-	Name        string   `json:"name"`
-	Description string   `json:"description"`
-	Permissions []string `json:"permissions"`
-}
-
 func CreateRole(c *fiber.Ctx) error {
-	var data CreateRoleBody
+	var data m.CreateRoleBody
 	// Parse the request body into the data variable
 	err := c.BodyParser(&data)
 	log.Println(data)
@@ -57,13 +51,8 @@ func CreateRole(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Role Created Successfully"})
 }
 
-type AddPermissionBody struct {
-	RoleID      string   `json:"role_id"`
-	Permissions []string `json:"permissions"`
-}
-
 func AddPermission(c *fiber.Ctx) error {
-	var data AddPermissionBody
+	var data m.AddPermissionBody
 	// Parse the request body into the data variable
 	err := c.BodyParser(&data)
 	log.Println(data)
@@ -133,4 +122,33 @@ func GetAllRoles(c *fiber.Ctx) error {
 		data = append(data, tmp_data)
 	}
 	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Permissions Fetched Successfully", Data: data})
+}
+
+func RemovePermission(c *fiber.Ctx) error {
+	var data m.DeletePermissionBody
+	err := c.BodyParser(&data)
+	log.Println(data)
+	if err != nil {
+		// If there's an error in parsing the body, log the error and return an Internal Server Error response
+		log.Println(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Internal Server Error"})
+	}
+	role_id, _ := uuid.Parse(data.RoleID)
+	permission_id, _ := uuid.Parse(data.PermissionID)
+	tx := db.DB.Where(&m.RolePermission{RoleID: role_id, PermissionID: permission_id}).Delete(&m.RolePermission{})
+	if tx.Error != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Error Removing Permission"})
+	}
+	var role m.Role
+	_ = db.DB.Where(&m.Role{ID: role_id}).Find(&role)
+	for i, permission := range role.Permissions {
+		if permission == data.PermissionID {
+			role.Permissions = append(role.Permissions[:i], role.Permissions[i+1:]...)
+		}
+	}
+	tx = db.DB.Save(&role)
+	if tx.Error != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Error Removing Permission"})
+	}
+	return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: true, Message: "Permission Removed Successfully"})
 }
