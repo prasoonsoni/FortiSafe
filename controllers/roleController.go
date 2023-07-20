@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/BalkanID-University/balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni/db"
@@ -103,4 +104,33 @@ func AddPermission(c *fiber.Ctx) error {
 
 	}
 	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Permissions Added Successfully"})
+}
+
+func GetAllRoles(c *fiber.Ctx) error {
+	var roles []m.Role
+	result := db.DB.Find(&roles)
+
+	if result.Error != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Internal Server Error"})
+	}
+	var data []interface{}
+	for _, role := range roles {
+		var tmp_data = make(map[string]interface{})
+		fmt.Println(role)
+		tmp_data["ID"] = role.ID
+		tmp_data["created_at"] = role.CreatedAt
+		tmp_data["updated_at"] = role.UpdatedAt
+		tmp_data["name"] = role.Name
+		tmp_data["description"] = role.Description
+		var permissions []m.Permission
+		for _, permission := range role.Permissions {
+			id, _ := uuid.Parse(permission)
+			var tmp_permission m.Permission
+			_ = db.DB.Where(&m.Permission{ID: id}).Find(&tmp_permission)
+			permissions = append(permissions, tmp_permission)
+		}
+		tmp_data["permissions"] = permissions
+		data = append(data, tmp_data)
+	}
+	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Permissions Fetched Successfully", Data: data})
 }

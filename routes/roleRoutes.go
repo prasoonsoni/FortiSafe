@@ -8,4 +8,5 @@ import (
 func SetupRoleRoutes(app *fiber.App) {
 	app.Post("/api/role/create", roleControllers.CreateRole)
 	app.Put("/api/role/permission/add", roleControllers.AddPermission)
+	app.Get("/api/role/get/all", roleControllers.GetAllRoles)
 }
