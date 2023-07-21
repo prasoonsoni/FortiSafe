@@ -30,3 +30,9 @@ type RemoveAssociatedRoleBody struct {
 	ResourceID string `json:"resource_id"`
 	RoleID     string `json:"role_id"`
 }
+
+type CreateGroupBody struct {
+	Name        string   `json:"name"`
+	Description string   `json:"description"`
+	Permissions []string `json:"permissions"`
+}
