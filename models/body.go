@@ -20,3 +20,8 @@ type AssignRoleBody struct {
 	UserID string `json:"user_id"`
 	RoleID string `json:"role_id"`
 }
+
+type AddAssociatedRolesBody struct {
+	ResourceID string `json:"resource_id"`
+	Roles      []string `json:"roles"`
+}
