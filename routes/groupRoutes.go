@@ -8,4 +8,5 @@ import (
 
 func SetupGroupRoutes(app *fiber.App) {
 	app.Post("/api/group/create", middlewares.AuthenticateAdmin, groupControllers.CreateGroup)
+	app.Put("/api/group/permission/add", middlewares.AuthenticateAdmin, groupControllers.AddGroupPermission)
 }

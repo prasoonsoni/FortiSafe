@@ -7,6 +7,7 @@ import (
 	m "github.com/BalkanID-University/balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni/models"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
+	"golang.org/x/exp/slices"
 )
 
 func CreateGroup(c *fiber.Ctx) error {
@@ -33,4 +34,37 @@ func CreateGroup(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Group Created Successfully"})
+}
+
+func AddGroupPermission(c *fiber.Ctx) error {
+	var data m.AddGroupPermissionBody
+	// Parse the request body into the data variable
+	err := c.BodyParser(&data)
+	log.Println(data)
+	if err != nil {
+		// If there's an error in parsing the body, log the error and return an Internal Server Error response
+		log.Println(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Internal Server Error"})
+	}
+	group_id, err := uuid.Parse(data.GroupID)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Give Valid ID"})
+	}
+	var group *m.Group
+	tx := db.DB.Where(&m.Group{ID: group_id}).Find(&group)
+	if tx.RowsAffected == 0 {
+		return c.Status(fiber.StatusNotFound).JSON(&m.Response{Success: false, Message: "Group Not Found"})
+	}
+
+	for _, permission := range data.Permissions {
+		if !slices.Contains(group.Permissions, permission) {
+			group.Permissions = append(group.Permissions, permission)
+		}
+	}
+	tx = db.DB.Save(&group)
+	if tx.Error != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Error Adding Permission"})
+
+	}
+	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Permissions Added Successfully"})
 }

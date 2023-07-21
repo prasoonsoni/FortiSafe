@@ -36,3 +36,8 @@ type CreateGroupBody struct {
 	Description string   `json:"description"`
 	Permissions []string `json:"permissions"`
 }
+
+type AddGroupPermissionBody struct {
+	GroupID     string   `json:"group_id"`
+	Permissions []string `json:"permissions"`
+}
