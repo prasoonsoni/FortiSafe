@@ -386,5 +386,5 @@ func BulkCreateUser(c *fiber.Ctx) error {
 		log.Println(tx.Error)
 	}
 	fmt.Println(users)
-	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "User Created Successfully"})
+	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Users Created Successfully"})
 }
