@@ -10,6 +10,31 @@ import (
 	"golang.org/x/exp/slices"
 )
 
+func hasPermission(permission_type string, user_id uuid.UUID) int {
+	var permission m.Permission
+	tx := db.DB.Where(&m.Permission{Name: permission_type}).Find(&permission)
+	if tx.Error != nil {
+		log.Println(tx.Error.Error())
+		return 500
+	}
+	var user m.User
+	tx = db.DB.Where(&m.User{ID: user_id}).Find(&user)
+	if tx.Error != nil {
+		log.Println(tx.Error.Error())
+		return 500
+	}
+	var role m.Role
+	tx = db.DB.Where(&m.Role{ID: user.RoleID}).Find(&role)
+	if tx.Error != nil {
+		log.Println(tx.Error.Error())
+		return 500
+	}
+	if !slices.Contains(role.Permissions, permission.ID.String()) {
+		return 401
+	}
+	return 200
+}
+
 func CreateResource(c *fiber.Ctx) error {
 	var resource m.Resource
 	err := c.BodyParser(&resource)
@@ -29,32 +54,20 @@ func CreateResource(c *fiber.Ctx) error {
 		log.Println(err.Error())
 		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Internal Server Error"})
 	}
-	var permission m.Permission
-	tx := db.DB.Where(&m.Permission{Name: "create"}).Find(&permission)
-	if tx.Error != nil {
-		log.Println(tx.Error.Error())
+	check := hasPermission("create", id)
+	if check == 500 {
 		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Internal Server Error"})
 	}
-	var user m.User
-	tx = db.DB.Where(&m.User{ID: id}).Find(&user)
-	if tx.Error != nil {
-		log.Println(tx.Error.Error())
-		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Internal Server Error"})
-	}
-	var role m.Role
-	tx = db.DB.Where(&m.Role{ID: user.RoleID}).Find(&role)
-	if tx.Error != nil {
-		log.Println(tx.Error.Error())
-		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Internal Server Error"})
-	}
-	if !slices.Contains(role.Permissions, permission.ID.String()) {
+	if check == 401 {
 		return c.Status(fiber.StatusUnauthorized).JSON(&m.Response{Success: false, Message: "You don't have access to create resource"})
 	}
 	// Create Resource Here
-	tx = db.DB.Create(&m.Resource{ID: uuid.New(), Name: resource.Name, Description: resource.Description, CreatedBy: id, AssociatedRoles: []string{role.ID.String()}})
+	tx := db.DB.Create(&m.Resource{ID: uuid.New(), Name: resource.Name, Description: resource.Description, CreatedBy: id})
 	if tx.Error != nil {
 		log.Println(tx.Error.Error())
 		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Internal Server Error"})
 	}
 	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Resource Created Successfully"})
 }
+
+
