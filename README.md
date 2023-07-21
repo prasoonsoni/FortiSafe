@@ -118,6 +118,18 @@ Form Data
 | :-------- | :------- |
 | `users` | `.csv file` |
 
+#### 8. Login User
+
+```http
+  POST /api/admin/login
+```
+
+Body
+| Parameter | Type     |
+| :-------- | :------- |
+| `email` | `string` |
+| `password` | `string` |
+
 ### Permission
 
 #### 1. Create Permission
