@@ -14,4 +14,5 @@ func SetupResourceRoutes(app *fiber.App) {
 
 	app.Put("/api/resource/role/add", resourceControllers.AddAssociatedRoles)
 	app.Delete("/api/resource/role/remove", resourceControllers.RemoveAssociatedRole)
+	app.Post("/api/resource/create/bulk", middlewares.AuthenticateUser, resourceControllers.BulkCreateResource)
 }

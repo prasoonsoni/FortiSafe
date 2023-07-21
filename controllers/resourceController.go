@@ -1,7 +1,11 @@
 package controllers
 
 import (
+	"encoding/csv"
+	"fmt"
+	"io"
 	"log"
+	"strings"
 
 	"github.com/BalkanID-University/balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni/db"
 	m "github.com/BalkanID-University/balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni/models"
@@ -271,5 +275,72 @@ func RemoveAssociatedRole(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Error Removing Role"})
 	}
 	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Role Removed Successfully"})
+
+}
+
+func BulkCreateResource(c *fiber.Ctx) error {
+	// Get the user_id from the local context and cast it to a string
+	user_id := c.Locals("user_id").(string)
+
+	// Parse the user_id into a UUID
+	id, err := uuid.Parse(user_id)
+
+	// If error occurs parsing the used_id return Internal Server Error
+	if err != nil {
+		log.Println(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Internal Server Error"})
+	}
+	check := hasPermission("create", id, uuid.Nil)
+	if check == 500 {
+		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Internal Server Error"})
+	}
+	if check == 401 {
+		return c.Status(fiber.StatusUnauthorized).JSON(&m.Response{Success: false, Message: "You don't have access to create resource"})
+	}
+	file, err := c.FormFile("resources")
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(&m.Response{Success: false, Message: "Error Uploading File"})
+	}
+	src, err := file.Open()
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Failed to open the uploaded file"})
+	}
+	defer src.Close()
+	// Create a CSV reader
+	reader := csv.NewReader(src)
+	// Process the CSV data
+	var resources []*m.Resource
+	for {
+		record, err := reader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Failed to read CSV file"})
+		}
+		if record[0] != "name" {
+			name := record[0]
+			description := record[1]
+			associated_roles := strings.Split(strings.Trim(record[2], "{}"), ", ")
+			created_by, _ := uuid.Parse(user_id)
+			associated_roles = append(associated_roles, c.Locals("user_role").(string))
+			fmt.Println(associated_roles)
+			resource := m.Resource{
+				ID:              uuid.New(),
+				Name:            name,
+				Description:     description,
+				CreatedBy:       created_by,
+				AssociatedRoles: associated_roles,
+			}
+			resources = append(resources, &resource)
+		}
+	}
+	tx := db.DB.Create(&resources)
+	if tx.Error != nil {
+		// If there's an error in saving the user, log the error and return an Internal Server Error response
+		log.Println(tx.Error)
+		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Error Creating Resources"})
+	}
+	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Resources Created Successfully"})
 
 }
