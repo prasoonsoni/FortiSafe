@@ -105,7 +105,7 @@ Header
 #### 7. Bulk Create User
 
 ```http
-  DELETE /api/user/create/bulk
+  POST /api/user/create/bulk
 ```
 
 Header
@@ -313,7 +313,7 @@ Path Variables
 | :-------- | :------- |
 | `resource_id` | `string` |
 
-#### 5. All Associated Role
+#### 5. Add Associated Role
 
 ```http
   PUT /api/resource/role/add
@@ -330,10 +330,10 @@ Body
 | `resource_id` | `string` |
 | `roles` | `[<role-id>, <role-id>...]` |
 
-#### 6. Remove Associated Roles
+#### 6. Remove Associated Role
 
 ```http
-  PUT /api/resource/role/remove
+  DELETE /api/resource/role/remove
 ```
 
 Header
@@ -346,3 +346,21 @@ Body
 | :-------- | :------- |
 | `resource_id` | `string` |
 | `role_id` | `string` |
+
+#### 7. Bulk Create Resource
+
+```http
+  POST /api/user/create/bulk
+```
+
+Header
+| Key | Value     |
+| :-------- | :------- |
+| `Authorization` | `Bearer <your-auth-token>` |
+
+Form Data
+| Key | Value     |
+| :-------- | :------- |
+| `resources` | `.csv file` |
+
+
