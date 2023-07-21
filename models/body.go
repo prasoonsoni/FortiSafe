@@ -22,6 +22,11 @@ type AssignRoleBody struct {
 }
 
 type AddAssociatedRolesBody struct {
-	ResourceID string `json:"resource_id"`
+	ResourceID string   `json:"resource_id"`
 	Roles      []string `json:"roles"`
+}
+
+type RemoveAssociatedRoleBody struct {
+	ResourceID string `json:"resource_id"`
+	RoleID     string `json:"role_id"`
 }
