@@ -1,6 +1,9 @@
 package controllers
 
 import (
+	"encoding/csv"
+	"fmt"
+	"io"
 	"log"
 	"os"
 	"time"
@@ -325,4 +328,63 @@ func DeleteUser(c *fiber.Ctx) error {
 		log.Println(result.Error)
 	}
 	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Account Deleted Successfully"})
+}
+
+func BulkCreateUser(c *fiber.Ctx) error {
+	file, err := c.FormFile("users")
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(&m.Response{Success: false, Message: "Error Uploading File"})
+	}
+	src, err := file.Open()
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Failed to open the uploaded file"})
+	}
+	defer src.Close()
+
+	// Create a CSV reader
+	reader := csv.NewReader(src)
+	// Process the CSV data
+	var users []*m.User
+	for {
+		record, err := reader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Failed to read CSV file"})
+		}
+		if record[0] == "name" && record[1] == "email" && record[2] == "password" && record[3] == "role_id" {
+			continue
+		} else {
+			name := record[0]
+			email := record[1]
+			password := record[2]
+			role_id, _ := uuid.Parse(record[3])
+			tx := db.DB.Where(&m.User{Email: email}).Find(&m.User{})
+			if tx.RowsAffected == 0 {
+				hashed_password, _ := bcrypt.GenerateFromPassword([]byte(password), 12)
+
+				// Create a new user with the data provided in the request body
+				user := &m.User{
+					ID:       uuid.New(),
+					Name:     name,
+					Email:    email,
+					Password: string(hashed_password),
+					RoleID:   role_id,
+				}
+
+				users = append(users, user)
+			}
+			// Process each record here
+			fmt.Println(record)
+		}
+	}
+	// Save the new user to the database
+	tx := db.DB.Create(&users)
+	if tx.Error != nil {
+		// If there's an error in saving the user, log the error and return an Internal Server Error response
+		log.Println(tx.Error)
+	}
+	fmt.Println(users)
+	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "User Created Successfully"})
 }

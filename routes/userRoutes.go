@@ -13,4 +13,5 @@ func SetupUserRoutes(app *fiber.App) {
 	app.Put("/api/user/deactivate", middlewares.AuthenticateUser, userControllers.DeactivateUser)
 	app.Put("/api/user/activate", middlewares.AuthenticateUser, userControllers.ActivateUser)
 	app.Delete("/api/user/delete", middlewares.AuthenticateUser, userControllers.DeleteUser)
+	app.Post("/api/user/create/bulk", userControllers.BulkCreateUser)
 }
