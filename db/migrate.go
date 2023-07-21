@@ -5,10 +5,11 @@ import (
 )
 
 func Migrate() {
-	_ = DB.AutoMigrate(&models.User{})
-	_ = DB.AutoMigrate(&models.AccountStatusLogs{})
-	_ = DB.AutoMigrate(&models.Permission{})
-	_ = DB.AutoMigrate(&models.Role{})
-	_ = DB.AutoMigrate(&models.RolePermission{})
-	_ = DB.AutoMigrate(&models.Resource{})
+	DB.AutoMigrate(&models.User{})
+	DB.AutoMigrate(&models.AccountStatusLogs{})
+	DB.AutoMigrate(&models.Permission{})
+	DB.AutoMigrate(&models.Role{})
+	DB.AutoMigrate(&models.RolePermission{})
+	DB.AutoMigrate(&models.Resource{})
+	DB.AutoMigrate(&models.Group{})
 }
