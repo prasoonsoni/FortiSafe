@@ -3,9 +3,25 @@
 
 # Role & Group Based Access Control System
 
+## ℹ️ Problem Statement
 Build a robust containerized task management system to handle user authentication, authorization and access management.
 
-## User API Reference
+## 📍 Key Features
+- Secure user registration and authentication
+- Account Deactivation and Deletion: Allow users to deactivate or delete their accounts, if applicable. Implement a mechanism to handle account deletion securely while considering data retention policies.
+- Role-based and Group-based access management on resources(Tasks) with ability to create custom roles and groups (Need to make sure endpoints are secure)
+- Protection against vulnerabilities like SQL injection attacks
+- Support for bulk upload using CSV(Both users and tasks) making sure all the relationships are preserved accurately
+
+## ⚙️ Tech Stack 
+- **GoLang**
+- **AWS RDS** (**PostgreSQL** Instance)
+- **Docker** - To Containerize the application
+- **Nginx** - For Reverse Proxy
+
+## 📖 API References
+
+### User
 
 #### 1. Create User
 
@@ -93,7 +109,7 @@ Form Data
 | :-------- | :------- |
 | `users` | `.csv file` |
 
-## Permission API Reference
+### Permission
 
 #### 1. Create Permission
 
@@ -123,7 +139,7 @@ Header
 | :-------- | :------- |
 | `Authorization` | `Bearer <your-auth-token>` |
 
-## Role API Reference
+### Role
 
 #### 1. Create Role
 
@@ -221,7 +237,7 @@ Query Params
 | :-------- | :------- |
 | `user_id` | `string` |
 
-## Resource API Reference
+### Resource
 
 #### 1. Create Resource
 
