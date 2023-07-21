@@ -14,10 +14,19 @@ Build a robust containerized task management system to handle user authenticatio
 - Support for bulk upload using CSV(Both users and tasks) making sure all the relationships are preserved accurately
 
 ## ⚙️ Tech Stack 
-- **GoLang**
-- **AWS RDS** (**PostgreSQL** Instance)
-- **Docker** - To Containerize the application
-- **Nginx** - For Reverse Proxy
+- **GoLang** - Used for developing efficient and fast server-side applications due to its compiled nature and strong concurrency support.
+- **AWS RDS (PostgreSQL Instance)** - Utilized as a managed database service to provide scalable, reliable, and performant storage for the application.
+- **Docker** - Employed for containerizing the application, ensuring consistency across different environments and facilitating easy deployment and scaling.
+- **Nginx** - Used as a reverse proxy to efficiently handle client requests, load balance, and improve security by serving as a barrier between clients and the application server.
+
+## ⚒️ Go Packages Used
+- **uuid** -  Generates unique identifiers for entities.
+- **jwt** - Creates secure JSON Web Tokens for authentication.
+- **bcrypt** - Hashes and encrypts passwords securely.
+- **gorm** - Simplifies database interactions with an ORM in Go.
+- **gofiber** - Fast and efficient web framework for building APIs in Go.
+- **godotenv** - Loads environment variables from a .env file.
+- **postgres** - Robust and scalable relational database management system.
 
 ## 📖 API References
 
