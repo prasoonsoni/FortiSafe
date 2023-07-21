@@ -68,3 +68,27 @@ func AddGroupPermission(c *fiber.Ctx) error {
 	}
 	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Permissions Added Successfully"})
 }
+
+func RemoveGroupPermission(c *fiber.Ctx) error {
+	var data m.DeleteGroupPermissionBody
+	err := c.BodyParser(&data)
+	log.Println(data)
+	if err != nil {
+		// If there's an error in parsing the body, log the error and return an Internal Server Error response
+		log.Println(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Internal Server Error"})
+	}
+	group_id, _ := uuid.Parse(data.GroupID)
+	var group m.Group
+	_ = db.DB.Where(&m.Group{ID: group_id}).Find(&group)
+	for i, permission := range group.Permissions {
+		if permission == data.PermissionID {
+			group.Permissions = append(group.Permissions[:i], group.Permissions[i+1:]...)
+		}
+	}
+	tx := db.DB.Save(&group)
+	if tx.Error != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Error Removing Permission"})
+	}
+	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Permission Removed Successfully"})
+}

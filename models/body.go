@@ -41,3 +41,8 @@ type AddGroupPermissionBody struct {
 	GroupID     string   `json:"group_id"`
 	Permissions []string `json:"permissions"`
 }
+
+type DeleteGroupPermissionBody struct {
+	GroupID      string `json:"role_id"`
+	PermissionID string `json:"permission_id"`
+}
