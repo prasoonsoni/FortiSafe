@@ -12,7 +12,7 @@ func SetupResourceRoutes(app *fiber.App) {
 	app.Put("/api/resource/update/:resource_id", middlewares.AuthenticateUser, resourceControllers.UpdateResource)
 	app.Delete("/api/resource/delete/:resource_id", middlewares.AuthenticateUser, resourceControllers.DeleteResource)
 
-	app.Put("/api/resource/role/add", resourceControllers.AddAssociatedRoles)
-	app.Delete("/api/resource/role/remove", resourceControllers.RemoveAssociatedRole)
+	app.Put("/api/resource/role/add", middlewares.AuthenticateAdmin, resourceControllers.AddAssociatedRoles)
+	app.Delete("/api/resource/role/remove", middlewares.AuthenticateAdmin, resourceControllers.RemoveAssociatedRole)
 	app.Post("/api/resource/create/bulk", middlewares.AuthenticateUser, resourceControllers.BulkCreateResource)
 }
