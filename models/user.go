@@ -18,4 +18,5 @@ type User struct {
 	DeletedAt     *time.Time `json:"deleted_at"`
 	DeactivatedAt *time.Time `json:"deactivated_at"`
 	RoleID        uuid.UUID  `gorm:"type:uuid" json:"role_id"`
+	GroupID       uuid.UUID  `gorm:"type:uuid" json:"group_id"`
 }
