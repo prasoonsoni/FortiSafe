@@ -157,6 +157,16 @@ Backend is accessible at `http://localhost:3000/`
     ├── roleRoutes.go
     └── userRoutes.go
 ```
+## 🔐 Pre Configured Permissions
+> Note - These are the basic permissions considered while creating this project.
+1. **create**: This permission allows a user to create new resources or data in the system. 
+2. **read**: This permission gives a user the ability to read and retrieve existing resources or data.
+3. **update**: This permission grants a user the ability to modify or update existing resources or data.
+4. **delete**: This permission enables a user to remove existing resources or data from the system.
+
+## 🔦 Basic Workflow
+![architecture](https://github.com/BalkanID-University/balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni/assets/75159757/e92121cc-99ac-4f83-b5a1-dbabc59b0d32)
+
 
 ## 📖 API References
 
@@ -626,5 +636,19 @@ Query Params
 | Parameter | Type     |
 | :-------- | :------- |
 | `user_id` | `string` |
+
+## 📷 Screenshots
+1. Building Docker Image
+![Building Image](https://github.com/BalkanID-University/balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni/assets/75159757/7ab76087-010f-4c33-aeeb-f2a6c4e36c52)
+
+2. Running Docker Image
+![Running Docker Image](https://github.com/BalkanID-University/balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni/assets/75159757/f2aaaf80-717f-49f0-b05d-0cad254c8a11)
+
+3. Accessing host using reverse proxy
+![Accessing host using reverse proxy](https://github.com/BalkanID-University/balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni/assets/75159757/3f62c39b-f500-4eb6-8651-371651c0a0f3)
+
+
+
+
 
 
