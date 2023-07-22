@@ -23,10 +23,87 @@ Build a robust containerized task management system to handle user authenticatio
 - **uuid** -  Generates unique identifiers for entities.
 - **jwt** - Creates secure JSON Web Tokens for authentication.
 - **bcrypt** - Hashes and encrypts passwords securely.
-- **gorm** - Simplifies database interactions with an ORM in Go.
+- **gorm** - Simplifies database interactions with an ORM in Go. It also protects from **SQL Injection**.
 - **gofiber** - Fast and efficient web framework for building APIs in Go.
 - **godotenv** - Loads environment variables from a .env file.
 - **postgres** - Robust and scalable relational database management system.
+
+## 🔧 Getting Started
+To get a local copy up and running follow these simple steps.
+
+### Prerequisites
+In order to get a copy of the project and run it locally, you'll need to have Go (v1.15 or later) and Docker installed on your machine.
+
+If you don't have Go installed, you can download it from the [official Go website](https://go.dev/doc/install). After installation, you can verify it by typing `go version` in your terminal. It should display the installed version of Go.
+
+For Docker, you can download it from the [official Docker website](https://www.docker.com/products/docker-desktop/). After installation, you can verify it by typing `docker --version` in your terminal. It should display the installed version of Docker.
+
+Make sure you also have a working Docker Compose. Docker Desktop installs Docker Compose by default on Mac and Windows, but you might need to add it separately in some Linux distributions. You can check its availability by typing `docker-compose --version` in your terminal.
+
+### Get Local Copy
+1. Clone the Repository
+```bash
+git clone https://github.com/BalkanID-University/balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni
+```
+2. Change the directory
+```bash
+cd balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni
+```
+### Create Environment Variables
+1. Change the name of `.env.example` to `.env`
+2. Add the following variables to `.env` file
+```env
+DB_HOST = <your-db-host>
+DB_NAME = <your-db-name>
+DB_USER = <your-db-user>
+DB_PASSWORD = <your-db-password>
+DB_PORT= <your-db-port>
+JWT_SECRET = <your-jwt-secret>
+ADMIN_EMAIL = <your-admin-email>
+ADMIN_PASSWORD = <your-admin-password>
+```
+> Note - Providing the `.env` variables used while creating the project for the running project
+```env
+DB_HOST = balkan-id-task.ci1ln5coayhf.us-east-1.rds.amazonaws.com
+DB_NAME = postgres
+DB_USER = prasoonsoni
+DB_PASSWORD = 6kOtWB2bymZguX4zeHn0
+DB_PORT= 5432
+JWT_SECRET = Pr@$o0n$0ni
+ADMIN_EMAIL = admin@prasoonsoni.com
+ADMIN_PASSWORD = Prasoon@admin
+```
+
+### Running the Project
+#### 1. Using Docker
+In order to test our service we first need to build and run docker-compose. Docker-compose will automate the build and the run of our two Dockerfile.
+To run this commands you must be in the repository’s root.
+1. Build the Image
+```bash
+docker-compose build
+```
+2. Start the service
+```bash
+docker-compose up -d
+```
+Now we have and built the image and service is started for both **go** and **nginx** (used for reverse-proxy).
+The Nginx reverse proxy will send all request from `localhost/balkanid/` to Golang service on port `3000`.
+
+Backend is accessible at `http://localhost/balkanid/`
+
+#### 2. Without Docker
+1. Download the required packages
+```bash
+go mod download
+```
+2. Run the `main.go`
+```bash
+go run main.go
+```
+> Note - When running without Docker we don't have access to reverse proxy (nginx) service.
+
+Backend is accessible at `http://localhost:3000/`
+
 
 ## 📂 Complete Project Folder Structure
 ```
