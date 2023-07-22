@@ -33,20 +33,35 @@ func hasPermission(permission_type string, user_id uuid.UUID, resource_id uuid.U
 		log.Println(tx.Error.Error())
 		return 500
 	}
+	var group m.Group
+	tx = db.DB.Where(&m.Group{ID: user.GroupID}).Find(&group)
+	if tx.Error != nil {
+		log.Println(tx.Error.Error())
+		return 500
+	}
+	fmt.Println(role)
+	fmt.Println(group)
 	if resource_id != uuid.Nil {
 		var resource m.Resource
 		db.DB.Where(&m.Resource{ID: resource_id}).Find(&resource)
-		if !slices.Contains(resource.AssociatedRoles, user.RoleID.String()) {
+		if user.RoleID != uuid.Nil && !slices.Contains(resource.AssociatedRoles, user.RoleID.String()) {
+			return 401
+		}
+		if user.GroupID != uuid.Nil && !slices.Contains(resource.AssociatedGroups, user.GroupID.String()) {
 			return 401
 		}
 	}
-	if user.RoleID == uuid.Nil {
+	if user.RoleID == uuid.Nil && user.GroupID == uuid.Nil {
 		return 401
 	}
 
-	if !slices.Contains(role.Permissions, permission.ID.String()) {
+	if user.RoleID != uuid.Nil && !slices.Contains(role.Permissions, permission.ID.String()) {
 		return 401
 	}
+	if user.GroupID != uuid.Nil && !slices.Contains(group.Permissions, permission.ID.String()) {
+		return 401
+	}
+
 	return 200
 }
 
