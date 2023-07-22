@@ -1,10 +1,8 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/YCCXVJKc)
-
 [![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-718a45dd9cf7e7f842a935f5ebbe5719a5e09af4491e668f4dbf3b35d5cca122.svg)](https://classroom.github.com/online_ide?assignment_repo_id=11469441&assignment_repo_type=AssignmentRepo)
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/28558819-fbc27156-acd1-40fb-911f-053538bf7dda?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D28558819-fbc27156-acd1-40fb-911f-053538bf7dda%26entityType%3Dcollection%26workspaceId%3D7daa153e-aea8-4ce7-a519-f33bbddc43eb)
-
-![https://documenter.getpostman.com/view/28558819/2s946mZ9Ld](https://img.shields.io/badge/Postman%20API%20Docs-FF6C37?style=for-the-badge&logo=Postman&logoColor=white)
+[![Postman API Docs](https://img.shields.io/badge/Postman%20API%20Docs-FF6C37?style=for-the-badge&logo=Postman&logoColor=white)](https://documenter.getpostman.com/view/28558819/2s946mZ9Ld)
 
 # Role & Group Based Access Control System
 
@@ -36,7 +34,7 @@ Build a robust containerized task management system to handle user authenticatio
 ## 🔧 Getting Started
 To get a local copy up and running follow these simple steps.
 
-### Prerequisites
+### 👉🏻 Prerequisites
 In order to get a copy of the project and run it locally, you'll need to have Go (v1.15 or later) and Docker installed on your machine.
 
 If you don't have Go installed, you can download it from the [official Go website](https://go.dev/doc/install). After installation, you can verify it by typing `go version` in your terminal. It should display the installed version of Go.
@@ -45,7 +43,7 @@ For Docker, you can download it from the [official Docker website](https://www.d
 
 Make sure you also have a working Docker Compose. Docker Desktop installs Docker Compose by default on Mac and Windows, but you might need to add it separately in some Linux distributions. You can check its availability by typing `docker-compose --version` in your terminal.
 
-### Get Local Copy
+### 👉🏻 Get Local Copy
 1. Clone the Repository
 ```bash
 git clone https://github.com/BalkanID-University/balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni
@@ -54,7 +52,7 @@ git clone https://github.com/BalkanID-University/balkanid-fte-hiring-task-vit-ve
 ```bash
 cd balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni
 ```
-### Create Environment Variables
+### 👉🏻 Create Environment Variables
 1. Change the name of `.env.example` to `.env`
 2. Add the following variables to `.env` file
 ```env
@@ -79,7 +77,7 @@ ADMIN_EMAIL = admin@prasoonsoni.com
 ADMIN_PASSWORD = Prasoon@admin
 ```
 
-### Running the Project
+### 👉🏻 Running the Project
 #### 1. Using Docker
 In order to test our service we first need to build and run docker-compose. Docker-compose will automate the build and the run of our two Dockerfile.
 To run this commands you must be in the repository’s root.
