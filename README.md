@@ -28,6 +28,56 @@ Build a robust containerized task management system to handle user authenticatio
 - **godotenv** - Loads environment variables from a .env file.
 - **postgres** - Robust and scalable relational database management system.
 
+## 📂 Complete Project Folder Structure
+```
+├── .env
+├── .env.example
+├── .gitignore
+├── docker-compose.yaml
+├── Dockerfile
+├── go.mod
+├── go.sum
+├── main.go
+├── README.md
+│
+├── controllers
+│   ├── groupController.go
+│   ├── permissionController.go
+│   ├── resourceController.go
+│   ├── roleController.go
+│   └── userController.go
+│
+├── db
+│    ├── db.go
+│    └── migrate.go
+│
+├── middlewares
+│   ├── authenticateAdmin.go
+│   └── authenticateUser.go
+│
+├── models
+│   ├── account_status_logs.go
+│   ├── body.go
+│   ├── group.go
+│   ├── permission.go
+│   ├── resource.go
+│   ├── response.go
+│   ├── role.go
+│   ├── role_permission.go
+│   └── user.go
+│
+├── nginx
+│   ├── Dockerfile
+│   └── nginx.conf
+│
+└── routes
+    ├── groupRoutes.go
+    ├── permissionRoutes.go
+    ├── resourceRoutes.go
+    ├── roleRoutes.go
+    └── userRoutes.go
+```
+
 ## 📖 API References
 
 ### User
