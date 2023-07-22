@@ -95,6 +95,7 @@ Body
 | `email` | `string` |
 | `password` | `string` |
 | `role_id` | `string` |
+| `group_id` | `string` |
 
 #### 2. Login User
 
@@ -117,7 +118,7 @@ Body
 Header
 | Key | Value     |
 | :-------- | :------- |
-| `Authorization` | `Bearer <your-auth-token>` |
+| `Authorization` | `Bearer <user-auth-token>` |
 
 #### 4. Deactivate User
 
@@ -128,7 +129,7 @@ Header
 Header
 | Key | Value     |
 | :-------- | :------- |
-| `Authorization` | `Bearer <your-auth-token>` |
+| `Authorization` | `Bearer <user-auth-token>` |
 
 #### 5. Activate User
 
@@ -161,14 +162,14 @@ Header
 Header
 | Key | Value     |
 | :-------- | :------- |
-| `Authorization` | `Bearer <your-auth-token>` |
+| `Authorization` | `Bearer <admin-auth-token>` |
 
 Form Data
 | Key | Value     |
 | :-------- | :------- |
 | `users` | `.csv file` |
 
-#### 8. Login User
+#### 8. Login Admin
 
 ```http
   POST /api/admin/login
@@ -191,7 +192,7 @@ Body
 Header
 | Key | Value     |
 | :-------- | :------- |
-| `Authorization` | `Bearer <your-auth-token>` |
+| `Authorization` | `Bearer <admin-auth-token>` |
 
 Body
 | Parameter | Type     |
@@ -208,7 +209,7 @@ Body
 Header
 | Key | Value     |
 | :-------- | :------- |
-| `Authorization` | `Bearer <your-auth-token>` |
+| `Authorization` | `Bearer <admin-auth-token>` |
 
 ### Role
 
@@ -221,7 +222,7 @@ Header
 Header
 | Key | Value     |
 | :-------- | :------- |
-| `Authorization` | `Bearer <your-auth-token>` |
+| `Authorization` | `Bearer <admin-auth-token>` |
 
 Body
 | Parameter | Type     |
@@ -233,13 +234,13 @@ Body
 #### 2. Add Permission
 
 ```http
-  PUT /api/role/add
+  PUT /api/role/permission/add
 ```
 
 Header
 | Key | Value     |
 | :-------- | :------- |
-| `Authorization` | `Bearer <your-auth-token>` |
+| `Authorization` | `Bearer <admin-auth-token>` |
 
 Body
 | Parameter | Type     |
@@ -256,7 +257,7 @@ Body
 Header
 | Key | Value     |
 | :-------- | :------- |
-| `Authorization` | `Bearer <your-auth-token>` |
+| `Authorization` | `Bearer <admin-auth-token>` |
 
 #### 4. Remove Permission
 
@@ -267,7 +268,7 @@ Header
 Header
 | Key | Value     |
 | :-------- | :------- |
-| `Authorization` | `Bearer <your-auth-token>` |
+| `Authorization` | `Bearer <admin-auth-token>` |
 
 Body
 | Parameter | Type     |
@@ -284,7 +285,7 @@ Body
 Header
 | Key | Value     |
 | :-------- | :------- |
-| `Authorization` | `Bearer <your-auth-token>` |
+| `Authorization` | `Bearer <admin-auth-token>` |
 
 Body
 | Parameter | Type     |
@@ -301,7 +302,7 @@ Body
 Header
 | Key | Value     |
 | :-------- | :------- |
-| `Authorization` | `Bearer <your-auth-token>` |
+| `Authorization` | `Bearer <admin-auth-token>` |
 
 Query Params
 | Parameter | Type     |
@@ -319,7 +320,7 @@ Query Params
 Header
 | Key | Value     |
 | :-------- | :------- |
-| `Authorization` | `Bearer <your-auth-token>` |
+| `Authorization` | `Bearer <user-auth-token>` |
 
 Body
 | Parameter | Type     |
@@ -336,7 +337,7 @@ Body
 Header
 | Key | Value     |
 | :-------- | :------- |
-| `Authorization` | `Bearer <your-auth-token>` |
+| `Authorization` | `Bearer <user-auth-token>` |
 
 Path Variables
 | Parameter | Type     |
@@ -352,7 +353,7 @@ Path Variables
 Header
 | Key | Value     |
 | :-------- | :------- |
-| `Authorization` | `Bearer <your-auth-token>` |
+| `Authorization` | `Bearer <user-auth-token>` |
 
 Path Variables
 | Parameter | Type     |
@@ -368,7 +369,7 @@ Path Variables
 Header
 | Key | Value     |
 | :-------- | :------- |
-| `Authorization` | `Bearer <your-auth-token>` |
+| `Authorization` | `Bearer <user-auth-token>` |
 
 Path Variables
 | Parameter | Type     |
@@ -384,7 +385,7 @@ Path Variables
 Header
 | Key | Value     |
 | :-------- | :------- |
-| `Authorization` | `Bearer <your-auth-token>` |
+| `Authorization` | `Bearer <admin-auth-token>` |
 
 Body
 | Parameter | Type     |
@@ -401,7 +402,7 @@ Body
 Header
 | Key | Value     |
 | :-------- | :------- |
-| `Authorization` | `Bearer <your-auth-token>` |
+| `Authorization` | `Bearer <admin-auth-token>` |
 
 Body
 | Parameter | Type     |
@@ -418,11 +419,132 @@ Body
 Header
 | Key | Value     |
 | :-------- | :------- |
-| `Authorization` | `Bearer <your-auth-token>` |
+| `Authorization` | `Bearer <user-auth-token>` |
 
 Form Data
 | Key | Value     |
 | :-------- | :------- |
 | `resources` | `.csv file` |
+
+#### 8. Add Associated Group
+
+```http
+  PUT /api/resource/group/add
+```
+
+Header
+| Key | Value     |
+| :-------- | :------- |
+| `Authorization` | `Bearer <admin-auth-token>` |
+
+Body
+| Parameter | Type     |
+| :-------- | :------- |
+| `resource_id` | `string` |
+| `groups` | `[<group-id>, <group-id>...]` |
+
+#### 9. Remove Associated Group
+
+```http
+  DELETE /api/resource/group/remove
+```
+
+Header
+| Key | Value     |
+| :-------- | :------- |
+| `Authorization` | `Bearer <admin-auth-token>` |
+
+Body
+| Parameter | Type     |
+| :-------- | :------- |
+| `resource_id` | `string` |
+| `group_id` | `string` |
+
+### Group
+
+#### 1. Create Group
+
+```http
+  POST /api/group/create
+```
+
+Header
+| Key | Value     |
+| :-------- | :------- |
+| `Authorization` | `Bearer <admin-auth-token>` |
+
+Body
+| Parameter | Type     |
+| :-------- | :------- |
+| `name` | `string` |
+| `description` | `string` |
+| `permissions` | `[<permission-id>, <permission-id>...]` |
+
+#### 2. Add Permission
+
+```http
+  PUT /api/group/permission/add
+```
+
+Header
+| Key | Value     |
+| :-------- | :------- |
+| `Authorization` | `Bearer <admin-auth-token>` |
+
+Body
+| Parameter | Type     |
+| :-------- | :------- |
+| `group_id` | `string` |
+| `permissions` | `[<permission-id>, <permission-id>...]` |
+
+#### 3. Remove Permission
+
+```http
+  DELETE /api/group/permission/remove
+```
+
+Header
+| Key | Value     |
+| :-------- | :------- |
+| `Authorization` | `Bearer <admin-auth-token>` |
+
+Body
+| Parameter | Type     |
+| :-------- | :------- |
+| `group_id` | `string` |
+| `permission_id` | `string` |
+
+#### 4. Assign Group
+
+```http
+  PUT /api/group/assign
+```
+
+Header
+| Key | Value     |
+| :-------- | :------- |
+| `Authorization` | `Bearer <admin-auth-token>` |
+
+Body
+| Parameter | Type     |
+| :-------- | :------- |
+| `user_id` | `string` |
+| `group_id` | `string` |
+
+#### 5. Unassign Group
+
+```http
+  PUT /api/group/unassign?user_id=<user-id>
+```
+
+Header
+| Key | Value     |
+| :-------- | :------- |
+| `Authorization` | `Bearer <admin-auth-token>` |
+
+Query Params
+| Parameter | Type     |
+| :-------- | :------- |
+| `user_id` | `string` |
 
 
