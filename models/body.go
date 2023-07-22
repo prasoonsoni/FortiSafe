@@ -51,3 +51,8 @@ type AssignGroupBody struct {
 	UserID  string `json:"user_id"`
 	GroupID string `json:"group_id"`
 }
+
+type AddAssociatedGroupsBody struct {
+	ResourceID string   `json:"resource_id"`
+	Groups      []string `json:"groups"`
+}
