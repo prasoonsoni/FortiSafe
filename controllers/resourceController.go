@@ -275,7 +275,6 @@ func RemoveAssociatedRole(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Error Removing Role"})
 	}
 	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Role Removed Successfully"})
-
 }
 
 func BulkCreateResource(c *fiber.Ctx) error {
@@ -344,7 +343,6 @@ func BulkCreateResource(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Error Creating Resources"})
 	}
 	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Resources Created Successfully"})
-
 }
 
 func AddAssociatedGroups(c *fiber.Ctx) error {
@@ -375,4 +373,34 @@ func AddAssociatedGroups(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Internal Server Error"})
 	}
 	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Group Added Successfully"})
+}
+
+func RemoveAssociatedGroup(c *fiber.Ctx) error {
+	var body m.RemoveAssociatedGroupBody
+	err := c.BodyParser(&body)
+	if err != nil {
+		// If there's an error in parsing the body, log the error and return an Internal Server Error response
+		log.Println(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Internal Server Error"})
+	}
+	resource_id, err := uuid.Parse(body.ResourceID)
+	if err != nil {
+		log.Println(err.Error())
+		return c.Status(fiber.StatusBadRequest).JSON(&m.Response{Success: false, Message: "Give valid resource_id"})
+	}
+	var resource m.Resource
+	tx := db.DB.Where(&m.Resource{ID: resource_id}).Find(&resource)
+	if tx.RowsAffected == 0 {
+		return c.Status(fiber.StatusNotFound).JSON(&m.Response{Success: false, Message: "No resource Found"})
+	}
+	for i, group := range resource.AssociatedGroups {
+		if group == body.GroupID {
+			resource.AssociatedGroups = append(resource.AssociatedGroups[:i], resource.AssociatedGroups[i+1:]...)
+		}
+	}
+	tx = db.DB.Save(&resource)
+	if tx.Error != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Error Removing Group"})
+	}
+	return c.Status(fiber.StatusOK).JSON(&m.Response{Success: true, Message: "Group Removed Successfully"})
 }

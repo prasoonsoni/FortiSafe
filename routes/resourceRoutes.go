@@ -11,9 +11,10 @@ func SetupResourceRoutes(app *fiber.App) {
 	app.Get("/api/resource/get/:resource_id", middlewares.AuthenticateUser, resourceControllers.GetResource)
 	app.Put("/api/resource/update/:resource_id", middlewares.AuthenticateUser, resourceControllers.UpdateResource)
 	app.Delete("/api/resource/delete/:resource_id", middlewares.AuthenticateUser, resourceControllers.DeleteResource)
+	app.Post("/api/resource/create/bulk", middlewares.AuthenticateUser, resourceControllers.BulkCreateResource)
 
 	app.Put("/api/resource/role/add", middlewares.AuthenticateAdmin, resourceControllers.AddAssociatedRoles)
 	app.Delete("/api/resource/role/remove", middlewares.AuthenticateAdmin, resourceControllers.RemoveAssociatedRole)
-	app.Post("/api/resource/create/bulk", middlewares.AuthenticateUser, resourceControllers.BulkCreateResource)
 	app.Put("/api/resource/group/add", middlewares.AuthenticateAdmin, resourceControllers.AddAssociatedGroups)
+	app.Delete("/api/resource/group/remove", middlewares.AuthenticateAdmin, resourceControllers.RemoveAssociatedGroup)
 }

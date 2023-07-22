@@ -56,3 +56,8 @@ type AddAssociatedGroupsBody struct {
 	ResourceID string   `json:"resource_id"`
 	Groups      []string `json:"groups"`
 }
+
+type RemoveAssociatedGroupBody struct {
+	ResourceID string `json:"resource_id"`
+	GroupID     string `json:"group_id"`
+}
