@@ -202,8 +202,8 @@ func UnassignRole(c *fiber.Ctx) error {
 	if tx := db.DB.Where(m.User{ID: user_id}).Find(&m.User{}); tx.RowsAffected == 0 {
 		return c.Status(fiber.StatusNotFound).JSON(&m.Response{Success: false, Message: "User not found"})
 	}
-	var user *m.User
-	tx := db.DB.Find(&user)
+	var user m.User
+	tx := db.DB.Where(&m.User{ID: user_id}).Find(&user)
 	if tx.Error != nil {
 		log.Println(tx.Error.Error())
 		return c.Status(fiber.StatusInternalServerError).JSON(&m.Response{Success: false, Message: "Error Unassign Role"})
