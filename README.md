@@ -4,7 +4,7 @@
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/28558819-fbc27156-acd1-40fb-911f-053538bf7dda?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D28558819-fbc27156-acd1-40fb-911f-053538bf7dda%26entityType%3Dcollection%26workspaceId%3D7daa153e-aea8-4ce7-a519-f33bbddc43eb)
 [![Postman API Docs](https://img.shields.io/badge/Postman%20API%20Docs-FF6C37?style=for-the-badge&logo=Postman&logoColor=white)](https://documenter.getpostman.com/view/28558819/2s946mZ9Ld)
 
-# Role & Group Based Access Control System
+# FortiSafe
 
 ## ℹ️ Problem Statement
 Build a robust containerized task management system to handle user authentication, authorization and access management.
@@ -46,11 +46,11 @@ Make sure you also have a working Docker Compose. Docker Desktop installs Docker
 ### 👉🏻 Get Local Copy
 1. Clone the Repository
 ```bash
-git clone https://github.com/BalkanID-University/balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni
+git clone https://github.com/prasoonsoni/FortiSafe
 ```
 2. Change the directory
 ```bash
-cd balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni
+cd FortiSafe
 ```
 ### 👉🏻 Create Environment Variables
 1. Change the name of `.env.example` to `.env`
@@ -65,17 +65,7 @@ JWT_SECRET = <your-jwt-secret>
 ADMIN_EMAIL = <your-admin-email>
 ADMIN_PASSWORD = <your-admin-password>
 ```
-> Note - Providing the `.env` variables used while creating the project for the running project
-```env
-DB_HOST = balkan-id-task.ci1ln5coayhf.us-east-1.rds.amazonaws.com
-DB_NAME = postgres
-DB_USER = prasoonsoni
-DB_PASSWORD = 6kOtWB2bymZguX4zeHn0
-DB_PORT= 5432
-JWT_SECRET = Pr@$o0n$0ni
-ADMIN_EMAIL = admin@prasoonsoni.com
-ADMIN_PASSWORD = Prasoon@admin
-```
+
 
 ### 👉🏻 Running the Project
 #### 1. Using Docker
@@ -90,9 +80,9 @@ docker-compose build
 docker-compose up -d
 ```
 Now we have and built the image and service is started for both **go** and **nginx** (used for reverse-proxy).
-The Nginx reverse proxy will send all request from `localhost/balkanid/` to Golang service on port `3000`.
+The Nginx reverse proxy will send all request from `localhost/fortisafe/` to Golang service on port `3000`.
 
-Backend is accessible at `http://localhost/balkanid/`
+Backend is accessible at `http://localhost/fortisafe/`
 
 #### 2. Without Docker
 1. Download the required packages
