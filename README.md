@@ -151,7 +151,7 @@ Backend is accessible at `http://localhost:3000/`
 4. **delete**: This permission enables a user to remove existing resources or data from the system.
 
 ## 🔦 Basic Workflow
-![architecture](https://github.com/BalkanID-University/balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni/assets/75159757/e92121cc-99ac-4f83-b5a1-dbabc59b0d32)
+![architecture](https://github.com/prasoonsoni/FortiSafe/assets/75159757/5a0a1730-8e7a-4b94-a6ea-f2347a2c4b12)
 
 
 ## 📖 API References
@@ -627,13 +627,13 @@ Query Params
 
 ## 📷 Screenshots
 1. Building Docker Image
-![Building Image](https://github.com/BalkanID-University/balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni/assets/75159757/7ab76087-010f-4c33-aeeb-f2a6c4e36c52)
+![Building Image](https://github.com/prasoonsoni/FortiSafe/assets/75159757/35d2a7d7-925a-43d8-b806-d36b72432a2b)
 
 2. Running Docker Image
-![Running Docker Image](https://github.com/BalkanID-University/balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni/assets/75159757/f2aaaf80-717f-49f0-b05d-0cad254c8a11)
+![Running Docker Image](https://github.com/prasoonsoni/FortiSafe/assets/75159757/cf7bfa58-6e1c-479c-839f-10584317396f)
 
 3. Accessing host using reverse proxy
-![Accessing host using reverse proxy](https://github.com/BalkanID-University/balkanid-fte-hiring-task-vit-vellore-2023-prasoonsoni/assets/75159757/3f62c39b-f500-4eb6-8651-371651c0a0f3)
+![Accessing host using reverse proxy](https://github.com/prasoonsoni/FortiSafe/assets/75159757/5b3368c3-98ac-4201-8fff-0b6a346f2d36)
 
 
 
